@@ -6,8 +6,15 @@
     <description>Recent content in Posts on CodeStack Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 12 Sep 2024 08:26:40 +0530</lastBuildDate>
+    <lastBuildDate>Thu, 03 Oct 2024 00:05:35 +0530</lastBuildDate>
     <atom:link href="https://blog.vineethp.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction To Step Function: Orchestrating Complex Workflows</title>
+      <link>https://blog.vineethp.com/posts/introducingstepfunction/</link>
+      <pubDate>Thu, 03 Oct 2024 00:05:35 +0530</pubDate>
+      <guid>https://blog.vineethp.com/posts/introducingstepfunction/</guid>
+      <description>&lt;p&gt;I was inspired to replicate the functionality of AWS Step Functions in my own code when I couldn&amp;rsquo;t find any libraries that suited my needs for orchestrating complex workflows. This led me to design a custom Step Function library to handle sequential and parallel execution, branch logic, error handling, and more.&lt;/p&gt;&#xA;&lt;h2 id=&#34;what-is-a-step-function&#34;&gt;What is a Step Function?&lt;/h2&gt;&#xA;&lt;p&gt;A &lt;strong&gt;Step Function&lt;/strong&gt; helps developers orchestrate complex workflows and track the execution status at each step. It essentially functions as a &lt;strong&gt;directed acyclic graph (DAG)&lt;/strong&gt; where each node represents a function call, and the connections between nodes define the order of execution. Every node in the graph points to the next step, unidirectionally, and each step depends on the result of the previous step—except for the first.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Hello World!</title>
       <link>https://blog.vineethp.com/posts/helloworld/</link>

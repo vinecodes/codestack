@@ -58,7 +58,7 @@ A Step Function helps developers orchestrate complex workflows and track the exe
     <header class="mb:32">
         <div class="font:40 font:extrabold">Introduction To Step Function: Orchestrating Complex Workflows</div>
         <div class="mt:16 f:fade-60">
-            <time>Sep 12, 2024</time>
+            <time>Oct 3, 2024</time>
             </div>
     </header><div class="
     _:where(a):hover{text-decoration-color:fade}
@@ -100,7 +100,7 @@ A Step Function helps developers orchestrate complex workflows and track the exe
 "><p>I was inspired to replicate the functionality of AWS Step Functions in my own code when I couldn&rsquo;t find any libraries that suited my needs for orchestrating complex workflows. This led me to design a custom Step Function library to handle sequential and parallel execution, branch logic, error handling, and more.</p>
 <h2 id="what-is-a-step-function">What is a Step Function?</h2>
 <p>A <strong>Step Function</strong> helps developers orchestrate complex workflows and track the execution status at each step. It essentially functions as a <strong>directed acyclic graph (DAG)</strong> where each node represents a function call, and the connections between nodes define the order of execution. Every node in the graph points to the next step, unidirectionally, and each step depends on the result of the previous step—except for the first.</p>
-<p>You can install the package directly from <a href="https://pypi.org/project/stepfunction/">PyPI</a>{target=&quot;_blank&quot;}</p>
+<p>You can install the package directly from <a href="https://pypi.org/project/stepfunction/">PyPI</a>.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install stepfunction
 </span></span></code></pre></div><h2 id="example">Example</h2>
 <p>The below example handles car purchase transactions by validating the transaction, updating shipping, payment, and inventory records in parallel, and notifying the customer. If any step fails, it gracefully triggers a fallback to manage the error without halting the workflow.</p>
