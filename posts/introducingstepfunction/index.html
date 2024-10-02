@@ -114,8 +114,8 @@ A Step Function helps developers orchestrate complex workflows and track the exe
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># Simulating the workflow steps for handling a car purchase transaction</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">validate_car_purchase_transaction</span>():
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Simulate validating the car purchase transaction.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_car_purchase_transaction</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Simulate parsing the car purchase transaction.&#34;&#34;&#34;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">check_if_car_purchase_transaction_is_valid</span>():
@@ -156,7 +156,7 @@ A Step Function helps developers orchestrate complex workflows and track the exe
 </span></span><span style="display:flex;"><span>    step_function <span style="color:#f92672">=</span> StepFunction(
 </span></span><span style="display:flex;"><span>        name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Validate_Car_Purchase_Transaction_Workflow&#34;</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    step_function<span style="color:#f92672">.</span>add_step(<span style="color:#e6db74">&#34;Parse_Car_Purchase_Transaction&#34;</span>, func<span style="color:#f92672">=</span>validate_car_purchase_transaction,
+</span></span><span style="display:flex;"><span>    step_function<span style="color:#f92672">.</span>add_step(<span style="color:#e6db74">&#34;Parse_Car_Purchase_Transaction&#34;</span>, func<span style="color:#f92672">=</span>parse_car_purchase_transaction,
 </span></span><span style="display:flex;"><span>                           next_step<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Check_If_Car_Purchase_Transaction_Is_Valid&#34;</span>, on_failure<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Generic_Failure_Handler&#34;</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    step_function<span style="color:#f92672">.</span>add_step(<span style="color:#e6db74">&#34;Check_If_Car_Purchase_Transaction_Is_Valid&#34;</span>, func<span style="color:#f92672">=</span>check_if_car_purchase_transaction_is_valid, branch<span style="color:#f92672">=</span>{
@@ -187,6 +187,8 @@ A Step Function helps developers orchestrate complex workflows and track the exe
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    step_function<span style="color:#f92672">.</span>add_step(<span style="color:#e6db74">&#34;Generic_Failure_Handler&#34;</span>,
 </span></span><span style="display:flex;"><span>                           func<span style="color:#f92672">=</span>generic_failure_handler)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    step_function<span style="color:#f92672">.</span>set_start_step(<span style="color:#e6db74">&#34;Parse_Car_Purchase_Transaction&#34;</span>)                   
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">await</span> step_function<span style="color:#f92672">.</span>execute()
 </span></span><span style="display:flex;"><span>
