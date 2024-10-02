@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>CodeStack Blog</title>
-    <link>http://localhost:1313/</link>
+    <link>https://blog.vineethp.com/</link>
     <description>Recent content on CodeStack Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 12 Sep 2024 08:26:40 +0530</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.vineethp.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hello World!</title>
-      <link>http://localhost:1313/posts/helloworld/</link>
+      <link>https://blog.vineethp.com/posts/helloworld/</link>
       <pubDate>Thu, 12 Sep 2024 08:26:40 +0530</pubDate>
-      <guid>http://localhost:1313/posts/helloworld/</guid>
+      <guid>https://blog.vineethp.com/posts/helloworld/</guid>
       <description>&lt;p&gt;Hello World!&lt;/p&gt;</description>
     </item>
   </channel>
