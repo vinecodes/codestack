@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <title>StepFunction 0.0.5 - An Update - CodeStack Blog</title>
+
+    
+    
+    <meta name="description" content="I have been using the stepfunction library across many of my projects where orchestration makes the code easier to reason about. While working with it, I kept running into a few missing pieces — smarter branching, built-in steps for common patterns like waiting and timeouts, and a way to handle transient failures gracefully. Version 0.0.5 addresses all of these.
+Callable Branch Routing
+In earlier versions, branching worked by matching the step&rsquo;s return value against a fixed dictionary of keys. That meant your function had to return a specific string (like &quot;success&quot; or &quot;failure&quot;) for the router to know which step to go to next. This was limiting — especially when your function returns a rich object like a dict or a dataclass." />
+    <meta name="author" content="Vineeth Penugonda" />
+    
+
+    <link href="https://unpkg.com/@master/normal.css" rel="stylesheet">
+    <script src="https://unpkg.com/@master/style@1.5.0"></script>
+    <script src="https://unpkg.com/@master/styles@1.13.0"></script>
+    <script src="https://unpkg.com/master-styles-group"></script>
+    <script src="https://unpkg.com/themes.js"></script>
+    <script>window.themes = window.themes || new window.Themes()</script>
+
+    <style>
+        :root {
+            --font-sans: "Inter var", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+        }
+    </style></head>
+<body class="bg:fade-84@dark font:fade-16@dark font:sans">
+    <nav class="w:full h:90 fixed bg:fade-84/.95@dark bg:white z:1000">
+    <div class="
+        h:full
+        w:full
+        max-w:1200
+        mx:auto
+        px:0
+        d:flex
+        align-items:center
+    ">
+        <div>
+            <a href="/" class="mr-3 font:extralight">
+              
+              CodeStack Blog
+              
+            </a>
+        </div>
+
+        <div class="ml:auto">
+            
+            
+            
+        </div>
+    </div>
+</nav>
+<div class="d:flex flex:column@<=sm pt:90 px:24 jc:center gap:44 word-break:break-word">
+        <div class="max-w:1200 w:full box:content-box">
+<article class="box:border-box pt:32">
+    <header class="mb:32">
+        <div class="font:40 font:extrabold">StepFunction 0.0.5 - An Update</div>
+        <div class="mt:16 f:fade-60">
+            <time>Apr 15, 2026</time>
+            </div>
+    </header><div class="
+    _:where(a):hover{text-decoration-color:fade}
+    _:where(a){text-decoration:2;underline;fade-10;_text-decoration-color:fade-70@dark}
+    _:where(blockquote){bl:5;solid;fade-76/.1;_bl:5;solid;fade-34/.1@dark}
+    _:where(code){font:90%;_v:middle}
+    _:where(code:not(.highlight_*,pre_*)){p:2;6;_r:4}
+    _:where(del){text-decoration:1;line-through;fade-68;_text-decoration-color:red-64@dark}
+    _:where(figcaption){text:14;_p:10;20;0;_width:fit;_mx:auto;_font:fade-56;_font:fade-57@dark}
+    _:where(h1){font:40;_font:extrabold}
+    _:where(h1,h2,h3)+:where(h1,h2,h3){mt:.5em}
+    _:where(h1,h2,h3,h4,h5,h6){mt:2em}
+    _:where(h2){mb:1em;_font:32}
+    _:where(h3){font:24}
+    _:where(h4){font:20}
+    _:where(h5){font:16}
+    _:where(h6){font:14}
+    _:where(li)::marker{font:fade-44;_font:fade-68@dark}
+    _:where(li){pl:.375em}
+    _:where(mark){text-decoration:1;underline;#fce016;_bg:transparent;_text-decoration-color:rgb(252;224;22/.5)@dark}
+    _:where(p,li){font:fade-76;_font:16;_line-height:1.65;_font:fade-34@dark}
+    _:where(p,pre,blockquote,figure,ul,ol,table){my:1.125em}
+    >:first-child{mt:0!}
+    _:where(pre){p:20;_r:8;_overflow:auto}
+    _:where(pre,code:not(.highlight_*)){bg:fade-2;_bg:fade-92!@dark}
+    _:where(strong,b,a,code:not(.highlight_*),mark,del){font:fade-92;_font:fade-12@dark}
+    _:where(table){width:full;_border-spacing:0}
+    _:where(td){v:baseline}
+    _:where(td,th):first-child{pl:0}
+    _:where(td,th):last-child{pr:0}
+    _:where(td,th){bb:1;solid;fade-92/.06;_p:6;_b:fade-4/.04@dark}
+    _:where(th){font:fade-78;_font:14;_text:left;_font:fade-12@dark}
+    _:where(th,p_code,li_code,a,mark){font:semibold;_font:medium@dark}
+    _:where(ul){list-style-type:disc}
+    _:where(ul,ol,blockquote){pl:1.5em}
+    _:where(video,img){max-width:full}
+    _:where(a,mark){text-underline-offset:3}
+    _:where(hr){h:2;_bg:fade-10;_bg:fade-70@dark;_my:3em}
+"><p>I have been using the <code>stepfunction</code> library across many of my projects where orchestration makes the code easier to reason about. While working with it, I kept running into a few missing pieces — smarter branching, built-in steps for common patterns like waiting and timeouts, and a way to handle transient failures gracefully. Version 0.0.5 addresses all of these.</p>
+<h2 id="callable-branch-routing">Callable Branch Routing</h2>
+<p>In earlier versions, branching worked by matching the step&rsquo;s return value against a fixed dictionary of keys. That meant your function had to return a specific string (like <code>&quot;success&quot;</code> or <code>&quot;failure&quot;</code>) for the router to know which step to go to next. This was limiting — especially when your function returns a rich object like a dict or a dataclass.</p>
+<p>Now <code>branch</code> also accepts a callable. Instead of returning a routing key, you return whatever makes sense for your business logic, and a separate router function decides the next step. This keeps your step functions clean and your routing logic explicit.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> asyncio <span style="color:#f92672">import</span> run
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> stepfunction <span style="color:#f92672">import</span> StepFunction
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process_order</span>(order: dict) <span style="color:#f92672">-&gt;</span> dict:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Simulate order processing</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> order<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;item&#34;</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>, <span style="color:#e6db74">&#34;total&#34;</span>: <span style="color:#ae81ff">99.0</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;failed&#34;</span>, <span style="color:#e6db74">&#34;reason&#34;</span>: <span style="color:#e6db74">&#34;empty order&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">route_order</span>(result: dict) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> result[<span style="color:#e6db74">&#34;status&#34;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;success&#34;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;confirm_order&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;handle_failure&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">confirm_order</span>(result: dict) <span style="color:#f92672">-&gt;</span> dict:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Order confirmed! Total: $</span><span style="color:#e6db74">{</span>result[<span style="color:#e6db74">&#39;total&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> result
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">handle_failure</span>(result: dict) <span style="color:#f92672">-&gt;</span> dict:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Order failed: </span><span style="color:#e6db74">{</span>result[<span style="color:#e6db74">&#39;reason&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> result
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
+</span></span><span style="display:flex;"><span>    sf <span style="color:#f92672">=</span> StepFunction(<span style="color:#e6db74">&#34;OrderFlow&#34;</span>)
+</span></span><span style="display:flex;"><span>    sf<span style="color:#f92672">.</span>add_step(<span style="color:#e6db74">&#34;process_order&#34;</span>, process_order, branch<span style="color:#f92672">=</span>route_order)
+</span></span><span style="display:flex;"><span>    sf<span style="color:#f92672">.</span>add_step(<span style="color:#e6db74">&#34;confirm_order&#34;</span>, confirm_order)
+</span></span><span style="display:flex;"><span>    sf<span style="color:#f92672">.</span>add_step(<span style="color:#e6db74">&#34;handle_failure&#34;</span>, handle_failure)
+</span></span><span style="display:flex;"><span>    sf<span style="color:#f92672">.</span>set_start_step(<span style="color:#e6db74">&#34;process_order&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">await</span> sf<span style="color:#f92672">.</span>execute(initial_input<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;item&#34;</span>: <span style="color:#e6db74">&#34;Book&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>run(main())
+</span></span></code></pre></div><p>The dict-based <code>branch</code> still works exactly as before — this is purely additive.</p>
+<h2 id="waitstep-and-timeoutstep">WaitStep and TimeoutStep</h2>
+<p>Two patterns I found myself reimplementing constantly are pausing between steps and enforcing a time limit on a slow operation. Neither of these should require custom code every time.</p>
+<ul>
+<li><code>WaitStep</code> pauses the workflow for a fixed number of seconds and passes the input through unchanged.</li>
+<li><code>TimeoutStep</code> wraps any function — sync or async — and raises a <code>StepTimeoutError</code> if it runs longer than the allowed duration.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> asyncio <span style="color:#f92672">import</span> run
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> stepfunction <span style="color:#f92672">import</span> StepFunction
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> stepfunction.steps <span style="color:#f92672">import</span> WaitStep, TimeoutStep
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fetch_data</span>(payload: dict) <span style="color:#f92672">-&gt;</span> dict:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Simulate a network call</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;data&#34;</span>: <span style="color:#e6db74">&#34;some result&#34;</span>, <span style="color:#f92672">**</span>payload}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process_data</span>(data: dict) <span style="color:#f92672">-&gt;</span> dict:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {<span style="color:#f92672">**</span>data, <span style="color:#e6db74">&#34;processed&#34;</span>: <span style="color:#66d9ef">True</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
+</span></span><span style="display:flex;"><span>    sf <span style="color:#f92672">=</span> StepFunction(<span style="color:#e6db74">&#34;DataPipeline&#34;</span>)
+</span></span><span style="display:flex;"><span>    sf<span style="color:#f92672">.</span>add_step(<span style="color:#e6db74">&#34;fetch&#34;</span>, TimeoutStep(func<span style="color:#f92672">=</span>fetch_data, timeout<span style="color:#f92672">=</span><span style="color:#ae81ff">10.0</span>), next_step<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;wait&#34;</span>)
+</span></span><span style="display:flex;"><span>    sf<span style="color:#f92672">.</span>add_step(<span style="color:#e6db74">&#34;wait&#34;</span>, WaitStep(duration<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>), next_step<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;process&#34;</span>)
+</span></span><span style="display:flex;"><span>    sf<span style="color:#f92672">.</span>add_step(<span style="color:#e6db74">&#34;process&#34;</span>, process_data)
+</span></span><span style="display:flex;"><span>    sf<span style="color:#f92672">.</span>set_start_step(<span style="color:#e6db74">&#34;fetch&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">await</span> sf<span style="color:#f92672">.</span>execute(initial_input<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;query&#34;</span>: <span style="color:#e6db74">&#34;items&#34;</span>})
+</span></span><span style="display:flex;"><span>    print(sf<span style="color:#f92672">.</span>context)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>run(main())
+</span></span></code></pre></div><p><code>TimeoutStep</code> works with both sync and async functions. Sync functions are offloaded to a thread pool so the timeout is enforced without blocking the event loop.</p>
+<h2 id="retrystep">RetryStep</h2>
+<p>APIs fail, services go down briefly, networks hiccup. <code>RetryStep</code> automatically tries the step again, waiting a bit between each attempt until it succeeds or runs out of retries.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> asyncio <span style="color:#f92672">import</span> run
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> stepfunction <span style="color:#f92672">import</span> StepFunction
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> stepfunction.steps <span style="color:#f92672">import</span> RetryStep
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>attempt_count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">flaky_api_call</span>(payload: dict) <span style="color:#f92672">-&gt;</span> dict:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">global</span> attempt_count
+</span></span><span style="display:flex;"><span>    attempt_count <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> attempt_count <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">3</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ConnectionError</span>(<span style="color:#e6db74">&#34;Service temporarily unavailable&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;data&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>, <span style="color:#e6db74">&#34;attempts&#34;</span>: attempt_count}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
+</span></span><span style="display:flex;"><span>    sf <span style="color:#f92672">=</span> StepFunction(<span style="color:#e6db74">&#34;APIFlow&#34;</span>)
+</span></span><span style="display:flex;"><span>    sf<span style="color:#f92672">.</span>add_step(
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;fetch&#34;</span>,
+</span></span><span style="display:flex;"><span>        RetryStep(func<span style="color:#f92672">=</span>flaky_api_call, max_retries<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, delay<span style="color:#f92672">=</span><span style="color:#ae81ff">1.0</span>),
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    sf<span style="color:#f92672">.</span>set_start_step(<span style="color:#e6db74">&#34;fetch&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">await</span> sf<span style="color:#f92672">.</span>execute(initial_input<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;endpoint&#34;</span>: <span style="color:#e6db74">&#34;/data&#34;</span>})
+</span></span><span style="display:flex;"><span>    print(sf<span style="color:#f92672">.</span>last_result)  <span style="color:#75715e"># {&#39;data&#39;: &#39;success&#39;, &#39;attempts&#39;: 3}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>run(main())
+</span></span></code></pre></div><p><code>max_retries=3</code> means the function can be called up to 4 times in total — the initial attempt plus three retries. <code>delay</code> is the number of seconds to wait between each attempt.</p>
+<h2 id="building-your-own-step">Building Your Own Step</h2>
+<p>All built-in steps extend <code>BaseStep</code>. You can do the same to package reusable logic into a clean, configurable class:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> typing <span style="color:#f92672">import</span> Any, Callable
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> stepfunction.steps <span style="color:#f92672">import</span> BaseStep
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MultiplyStep</span>(BaseStep):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, factor: float):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>factor <span style="color:#f92672">=</span> factor
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">build</span>(self) <span style="color:#f92672">-&gt;</span> Callable:
+</span></span><span style="display:flex;"><span>        factor <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>factor
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>(input_value: Any) <span style="color:#f92672">-&gt;</span> Any:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> input_value <span style="color:#f92672">*</span> factor
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> run
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Usage</span>
+</span></span><span style="display:flex;"><span>sf<span style="color:#f92672">.</span>add_step(<span style="color:#e6db74">&#34;double&#34;</span>, MultiplyStep(factor<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>), next_step<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;next_step&#34;</span>)
+</span></span></code></pre></div><p>Pass an instance directly to <code>add_step</code> — the framework calls <code>build()</code> for you.</p>
+</div></article>
+<footer class="py:24">
+    <div class="f:fade-30 f:14 mb:8"></div>
+    <div class="f:fade-60 f:12">Theme <a class="f:bold" href="https://github.com/serkodev/holy" _target="_blank">Holy</a></div>
+</footer></div>
+    </div>
+</body>
+
+</html>

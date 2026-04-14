@@ -6,8 +6,15 @@
     <description>Recent content in Posts on CodeStack Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 03 Oct 2024 00:05:35 +0530</lastBuildDate>
+    <lastBuildDate>Wed, 15 Apr 2026 02:30:37 +0530</lastBuildDate>
     <atom:link href="https://blog.vineethp.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>StepFunction 0.0.5 - An Update</title>
+      <link>https://blog.vineethp.com/posts/stepfunction-0.0.5/</link>
+      <pubDate>Wed, 15 Apr 2026 02:30:37 +0530</pubDate>
+      <guid>https://blog.vineethp.com/posts/stepfunction-0.0.5/</guid>
+      <description>&lt;p&gt;I have been using the &lt;code&gt;stepfunction&lt;/code&gt; library across many of my projects where orchestration makes the code easier to reason about. While working with it, I kept running into a few missing pieces — smarter branching, built-in steps for common patterns like waiting and timeouts, and a way to handle transient failures gracefully. Version 0.0.5 addresses all of these.&lt;/p&gt;&#xA;&lt;h2 id=&#34;callable-branch-routing&#34;&gt;Callable Branch Routing&lt;/h2&gt;&#xA;&lt;p&gt;In earlier versions, branching worked by matching the step&amp;rsquo;s return value against a fixed dictionary of keys. That meant your function had to return a specific string (like &lt;code&gt;&amp;quot;success&amp;quot;&lt;/code&gt; or &lt;code&gt;&amp;quot;failure&amp;quot;&lt;/code&gt;) for the router to know which step to go to next. This was limiting — especially when your function returns a rich object like a dict or a dataclass.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Introduction To Step Function: Orchestrating Complex Workflows</title>
       <link>https://blog.vineethp.com/posts/introducingstepfunction/</link>
