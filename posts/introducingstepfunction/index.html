@@ -11,7 +11,7 @@
     <meta name="description" content="I was inspired to replicate the functionality of AWS Step Functions in my own code when I couldn&rsquo;t find any libraries that suited my needs for orchestrating complex workflows. This led me to design a custom Step Function library to handle sequential and parallel execution, branch logic, error handling, and more.
 What is a Step Function?
 A Step Function helps developers orchestrate complex workflows and track the execution status at each step. It essentially functions as a directed acyclic graph (DAG) where each node represents a function call, and the connections between nodes define the order of execution. Every node in the graph points to the next step, unidirectionally, and each step depends on the result of the previous step—except for the first." />
-    <meta name="author" content="" />
+    <meta name="author" content="Vineeth Penugonda" />
     
 
     <link href="https://unpkg.com/@master/normal.css" rel="stylesheet">
@@ -101,7 +101,7 @@ A Step Function helps developers orchestrate complex workflows and track the exe
 <h2 id="what-is-a-step-function">What is a Step Function?</h2>
 <p>A <strong>Step Function</strong> helps developers orchestrate complex workflows and track the execution status at each step. It essentially functions as a <strong>directed acyclic graph (DAG)</strong> where each node represents a function call, and the connections between nodes define the order of execution. Every node in the graph points to the next step, unidirectionally, and each step depends on the result of the previous step—except for the first.</p>
 <p>You can install the package directly from <a href="https://pypi.org/project/stepfunction/">PyPI</a>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install stepfunction
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install stepfunction
 </span></span></code></pre></div><h2 id="example">Example</h2>
 <p>The below example handles car purchase transactions by validating the transaction, updating shipping, payment, and inventory records in parallel, and notifying the customer. If any step fails, it gracefully triggers a fallback to manage the error without halting the workflow.</p>
 <figure><img src="/images/Validate_Car_Purchase_Transaction_Workflow.gv.cairo.png"
@@ -110,7 +110,7 @@ A Step Function helps developers orchestrate complex workflows and track the exe
     </figcaption>
 </figure>
 
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> stepfunction.core.step_function <span style="color:#f92672">import</span> StepFunction
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> stepfunction.core.step_function <span style="color:#f92672">import</span> StepFunction
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># Simulating the workflow steps for handling a car purchase transaction</span>
 </span></span><span style="display:flex;"><span>
@@ -215,46 +215,46 @@ A Step Function helps developers orchestrate complex workflows and track the exe
 <table>
   <thead>
       <tr>
-          <th style="text-align: left"><strong>Argument</strong></th>
-          <th style="text-align: left"><strong>Purpose</strong></th>
-          <th style="text-align: left"><strong>Type</strong></th>
+          <th><strong>Argument</strong></th>
+          <th><strong>Purpose</strong></th>
+          <th><strong>Type</strong></th>
       </tr>
   </thead>
   <tbody>
       <tr>
-          <td style="text-align: left"><code>name</code></td>
-          <td style="text-align: left">Name of the step</td>
-          <td style="text-align: left"><code>str</code></td>
+          <td><code>name</code></td>
+          <td>Name of the step</td>
+          <td><code>str</code></td>
       </tr>
       <tr>
-          <td style="text-align: left"><code>func</code></td>
-          <td style="text-align: left">Function to be executed</td>
-          <td style="text-align: left"><code>Union[Callable[[Any], Any], Dict[str, Callable[[Any], Any]]]</code></td>
+          <td><code>func</code></td>
+          <td>Function to be executed</td>
+          <td><code>Union[Callable[[Any], Any], Dict[str, Callable[[Any], Any]]]</code></td>
       </tr>
       <tr>
-          <td style="text-align: left"><code>next_step</code></td>
-          <td style="text-align: left">Name of the next step to be executed (if no branching)</td>
-          <td style="text-align: left"><code>Optional[str]</code></td>
+          <td><code>next_step</code></td>
+          <td>Name of the next step to be executed (if no branching)</td>
+          <td><code>Optional[str]</code></td>
       </tr>
       <tr>
-          <td style="text-align: left"><code>on_failure</code></td>
-          <td style="text-align: left">Name of the step to execute if the current step fails</td>
-          <td style="text-align: left"><code>Optional[str]</code></td>
+          <td><code>on_failure</code></td>
+          <td>Name of the step to execute if the current step fails</td>
+          <td><code>Optional[str]</code></td>
       </tr>
       <tr>
-          <td style="text-align: left"><code>branch</code></td>
-          <td style="text-align: left">Logic to decide the next step based on the result of the current step</td>
-          <td style="text-align: left"><code>Optional[Dict[Any, str]]</code></td>
+          <td><code>branch</code></td>
+          <td>Logic to decide the next step based on the result of the current step</td>
+          <td><code>Optional[Dict[Any, str]]</code></td>
       </tr>
       <tr>
-          <td style="text-align: left"><code>parallel</code></td>
-          <td style="text-align: left">Whether to execute the step in parallel with other steps</td>
-          <td style="text-align: left"><code>bool</code> (default: <code>False</code>)</td>
+          <td><code>parallel</code></td>
+          <td>Whether to execute the step in parallel with other steps</td>
+          <td><code>bool</code> (default: <code>False</code>)</td>
       </tr>
       <tr>
-          <td style="text-align: left"><code>stop_on_failure</code></td>
-          <td style="text-align: left">Whether to stop all parallel executions if one step fails</td>
-          <td style="text-align: left"><code>bool</code> (default: <code>False</code>)</td>
+          <td><code>stop_on_failure</code></td>
+          <td>Whether to stop all parallel executions if one step fails</td>
+          <td><code>bool</code> (default: <code>False</code>)</td>
       </tr>
   </tbody>
 </table>
@@ -264,30 +264,30 @@ A Step Function helps developers orchestrate complex workflows and track the exe
 <table>
   <thead>
       <tr>
-          <th style="text-align: left"><strong>Property</strong></th>
-          <th style="text-align: left"><strong>Purpose</strong></th>
+          <th><strong>Property</strong></th>
+          <th><strong>Purpose</strong></th>
       </tr>
   </thead>
   <tbody>
       <tr>
-          <td style="text-align: left"><code>name</code></td>
-          <td style="text-align: left">The name of the Step Function</td>
+          <td><code>name</code></td>
+          <td>The name of the Step Function</td>
       </tr>
       <tr>
-          <td style="text-align: left"><code>steps</code></td>
-          <td style="text-align: left">A dictionary containing all the steps defined in the workflow</td>
+          <td><code>steps</code></td>
+          <td>A dictionary containing all the steps defined in the workflow</td>
       </tr>
       <tr>
-          <td style="text-align: left"><code>last_result</code></td>
-          <td style="text-align: left">The result of the most recently executed step</td>
+          <td><code>last_result</code></td>
+          <td>The result of the most recently executed step</td>
       </tr>
       <tr>
-          <td style="text-align: left"><code>context</code></td>
-          <td style="text-align: left">A dictionary that stores the results of all steps, including exceptions</td>
+          <td><code>context</code></td>
+          <td>A dictionary that stores the results of all steps, including exceptions</td>
       </tr>
       <tr>
-          <td style="text-align: left"><code>status</code></td>
-          <td style="text-align: left">The current status of the Step Function (e.g., <code>INITIALIZED</code>, <code>RUNNING</code>, <code>COMPLETED</code>, <code>FAILED</code>)</td>
+          <td><code>status</code></td>
+          <td>The current status of the Step Function (e.g., <code>INITIALIZED</code>, <code>RUNNING</code>, <code>COMPLETED</code>, <code>FAILED</code>)</td>
       </tr>
   </tbody>
 </table>
