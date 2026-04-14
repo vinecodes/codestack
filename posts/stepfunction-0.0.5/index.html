@@ -8,9 +8,7 @@
 
     
     
-    <meta name="description" content="I have been using the stepfunction library across many of my projects where orchestration makes the code easier to reason about. While working with it, I kept running into a few missing pieces — smarter branching, built-in steps for common patterns like waiting and timeouts, and a way to handle transient failures gracefully. Version 0.0.5 addresses all of these.
-Callable Branch Routing
-In earlier versions, branching worked by matching the step&rsquo;s return value against a fixed dictionary of keys. That meant your function had to return a specific string (like &quot;success&quot; or &quot;failure&quot;) for the router to know which step to go to next. This was limiting — especially when your function returns a rich object like a dict or a dataclass." />
+    <meta name="description" content="I have been using the stepfunction library across many of my projects where orchestration makes the code easier to reason about. While working with it, I kept running into a few missing pieces — smarter branching, built-in steps for common patterns like waiting and timeouts, and a way to handle transient failures gracefully. Version 0.0.5 addresses all of these. It also fixes Python 3.9 compatibility, so everything works on 3.9 and above." />
     <meta name="author" content="Vineeth Penugonda" />
     
 
@@ -97,7 +95,7 @@ In earlier versions, branching worked by matching the step&rsquo;s return value 
     _:where(video,img){max-width:full}
     _:where(a,mark){text-underline-offset:3}
     _:where(hr){h:2;_bg:fade-10;_bg:fade-70@dark;_my:3em}
-"><p>I have been using the <code>stepfunction</code> library across many of my projects where orchestration makes the code easier to reason about. While working with it, I kept running into a few missing pieces — smarter branching, built-in steps for common patterns like waiting and timeouts, and a way to handle transient failures gracefully. Version 0.0.5 addresses all of these.</p>
+"><p>I have been using the <code>stepfunction</code> library across many of my projects where orchestration makes the code easier to reason about. While working with it, I kept running into a few missing pieces — smarter branching, built-in steps for common patterns like waiting and timeouts, and a way to handle transient failures gracefully. Version 0.0.5 addresses all of these. It also fixes Python 3.9 compatibility, so everything works on 3.9 and above.</p>
 <h2 id="callable-branch-routing">Callable Branch Routing</h2>
 <p>In earlier versions, branching worked by matching the step&rsquo;s return value against a fixed dictionary of keys. That meant your function had to return a specific string (like <code>&quot;success&quot;</code> or <code>&quot;failure&quot;</code>) for the router to know which step to go to next. This was limiting — especially when your function returns a rich object like a dict or a dataclass.</p>
 <p>Now <code>branch</code> also accepts a callable. Instead of returning a routing key, you return whatever makes sense for your business logic, and a separate router function decides the next step. This keeps your step functions clean and your routing logic explicit.</p>
